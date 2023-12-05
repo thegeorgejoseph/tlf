@@ -21,3 +21,5 @@
 go.work
 
 tlf.db
+
+dist/
