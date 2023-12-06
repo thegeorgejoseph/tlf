@@ -33,11 +33,29 @@ func getMethod(key, identifier string) string {
     }
     return result
 }
-// getCmd represents the get command
+
+func getHistory(identifier string) {
+    err := db.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(identifier))
+		if bucket == nil {
+			return fmt.Errorf("You might not have initialized tlf yet. Try setting a key first.")
+		}
+        i := 1
+		return bucket.ForEach(func(k, v []byte) error {
+			fmt.Printf("Key %d: %s\n",i, k)
+            i++
+			return nil
+		})
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 var getCmd = &cobra.Command{
     Use:   "get",
-    Short: "Command to get the value or link of a key in the clipboard history",
-    Long: `get is used to get the value or link of a key in the clipboard history.
+    Short: "Command to get the value or link of a key in tlf",
+    Long: `get is used to get the value or link of a key in tlf.
     For example:
 
     tlf get -v myKey will return the value of myKey
@@ -45,6 +63,13 @@ var getCmd = &cobra.Command{
 
     `,
     Run: func(cmd *cobra.Command, args []string) {
+        history, _ := cmd.Flags().GetBool("history")
+        if history{
+            fmt.Println("History of all your saved keys:")
+            fmt.Println("")
+            getHistory("value")
+            os.Exit(0)
+        }
         if int(cmd.Flags().NFlag()) == 0 {
             err := fmt.Errorf("You need to specify either -v or -l")
             fmt.Println(err)
@@ -84,6 +109,7 @@ var getCmd = &cobra.Command{
 func init() {
     rootCmd.AddCommand(getCmd)
 
-    getCmd.Flags().BoolP("value", "v", false, "Get the value of a key in the clipboard history")
-    getCmd.Flags().BoolP("link", "l", false, "Get the link of a key in the clipboard history")
+    getCmd.Flags().BoolP("value", "v", false, "Get the value of a key in tlf")
+    getCmd.Flags().BoolP("link", "l", false, "Get the link of a key in tlf")
+    getCmd.Flags().BoolP("history", "a", false, "Get the history of keys in tlf")
 }

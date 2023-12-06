@@ -39,8 +39,8 @@ func isValidURL(input string) bool {
 
 var setCmd = &cobra.Command{
     Use:   "set",
-    Short: "Command to set a key value pair in the clipboard history",
-    Long: `set is used to set a key value pair in the clipboard history.
+    Short: "Command to set a key value pair in tlf",
+    Long: `set is used to set a key value pair in tlf.
     For example:
 
     tlf set -k myKey -v myValue -l myLink
@@ -50,7 +50,6 @@ var setCmd = &cobra.Command{
         value, _ := cmd.Flags().GetString("value")
         link, _ := cmd.Flags().GetString("link")
         
-        fmt.Printf("%d Flags founds", int(cmd.Flags().NFlag()))
         if key != "" {
             fmt.Println("Key: ", key)
         }
@@ -69,9 +68,9 @@ var setCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(setCmd)
 
-    setCmd.Flags().StringP("key", "k", "", "Key to set in the clipboard history")
+    setCmd.Flags().StringP("key", "k", "", "Key to set in tlf")
     setCmd.MarkFlagRequired("key")
-    setCmd.Flags().StringP("value", "v", "", "Value to set in the clipboard history")
-    setCmd.Flags().StringP("link", "l", "", "Link to set in the clipboard history")
+    setCmd.Flags().StringP("value", "v", "", "Value to set in tlf")
+    setCmd.Flags().StringP("link", "l", "", "Link to set in tlf")
 
 }
