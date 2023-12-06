@@ -29,8 +29,11 @@ $ tlf get myKey -v
 # Get the link of a key
 $ tlf get myKey -l
 
-# Automatically copy the response to the clipboard
+# Automatically copy the response to tlf
 $ tlf get myKey -v
+
+# Get the History of all keys in tlf
+$ tlf get -a
 ```
 
 ### Additional Commands
